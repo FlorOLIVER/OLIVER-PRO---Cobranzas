@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oliver Sports · Cobranzas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0d1b2e;--blue:#3b6fd4;--blue-l:#5a8be8;--blue-bg:#eef3fc;
+  --pink:#d4386c;--pink-bg:#fceef3;--pink-l:#e8607f;
+  --red:#c0392b;--red-bg:#fdf0ee;
+  --orange:#e07b2a;--orange-bg:#fef5ec;
+  --green:#1e8a5e;--green-bg:#eaf7f2;
+  --g1:#f8f9fb;--g2:#f1f3f7;--g3:#e4e8f0;--g4:#c5cdd8;--g5:#8a95a3;--g6:#4a5568;
+  --text:#1a202c;--white:#fff;--border:#e4e8f0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--g1);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;}
+nav{background:var(--navy);height:56px;display:flex;align-items:stretch;padding:0 28px;position:sticky;top:0;z-index:200;}
+.logo-wrap{display:flex;align-items:center;gap:10px;margin-right:28px;}
+.logo-icon{width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.01em;}
+.logo-text span{color:var(--blue-l);}
+.nav-tabs{display:flex;align-items:stretch;gap:4px;}
+.nav-tab{background:none;border:none;color:rgba(255,255,255,.45);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:0 16px;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
+.nav-tab:hover{color:rgba(255,255,255,.8);}
+.nav-tab.active{color:#fff;border-bottom-color:var(--blue-l);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.gen-badge{font-size:11px;color:rgba(255,255,255,.35);font-family:'IBM Plex Mono',monospace;}
+.hdr-badge{background:rgba(212,56,108,.2);border:1px solid rgba(212,56,108,.4);color:#f4879b;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.page{display:none;padding:24px 28px;max-width:1280px;margin:0 auto;}
+.page.active{display:block;}
+.workflow{background:var(--navy);border-radius:12px;padding:16px 20px;margin-bottom:20px;}
+.wf-title{font-size:11px;font-weight:600;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.wf-steps{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.wf-step{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 12px;}
+.wf-date{font-size:11px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
+.wf-action{font-size:12px;color:rgba(255,255,255,.7);}
+.wf-arrow{color:rgba(255,255,255,.2);font-size:16px;padding:0 4px;}
+.wf-step.lunes .wf-date{color:var(--blue-l);}
+.wf-step.jueves .wf-date{color:var(--pink-l);}
+.wf-step.mora .wf-date{color:#f4879b;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stat{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.stat-label{font-size:11px;font-weight:600;color:var(--g5);text-transform:uppercase;letter-spacing:.06em;}
+.stat-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.ic-blue{background:var(--blue-bg);}
+.ic-red{background:var(--red-bg);}
+.ic-orange{background:var(--orange-bg);}
+.ic-green{background:var(--green-bg);}
+.stat-value{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1;margin-bottom:3px;}
+.c-blue{color:var(--blue);}
+.c-red{color:var(--red);}
+.c-orange{color:var(--orange);}
+.c-navy{color:var(--navy);}
+.stat-sub{font-size:11px;color:var(--g5);}
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.fbtn{padding:5px 13px;background:var(--white);border:1px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;font-family:'Inter',sans-serif;color:var(--g6);cursor:pointer;transition:all .15s;}
+.fbtn:hover{border-color:var(--blue);color:var(--blue);}
+.fbtn.fa{background:var(--navy);border-color:var(--navy);color:#fff;}
+.fbtn.fa-mora{background:var(--red-bg);border-color:var(--red);color:var(--red);}
+.fbtn.fa-suspension{background:var(--pink-bg);border-color:var(--pink);color:var(--pink);}
+.fbtn.fa-aviso{background:var(--orange-bg);border-color:var(--orange);color:var(--orange);}
+.fbtn.fa-sent{background:var(--green-bg);border-color:var(--green);color:var(--green);}
+.fbtn.fa-open{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);}
+.search-wrap{margin-left:auto;position:relative;}
+.search-wrap input{background:var(--white);border:1px solid var(--border);color:var(--text);padding:6px 12px 6px 30px;border-radius:20px;font-size:12px;font-family:'Inter',sans-serif;outline:none;width:220px;}
+.search-wrap input:focus{border-color:var(--blue);}
+.search-wrap input::placeholder{color:var(--g4);}
+.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--g4);font-size:13px;pointer-events:none;}
+.tcard{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+thead th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--g5);text-transform:uppercase;letter-spacing:.06em;background:var(--g2);border-bottom:1px solid var(--border);white-space:nowrap;}
+thead th.r{text-align:right;}
+tbody tr{border-bottom:1px solid var(--g2);transition:background .1s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--g1);}
+tbody td{padding:11px 14px;vertical-align:middle;}
+td.r{text-align:right;}
+.row-mora td:first-child{border-left:3px solid var(--red);}
+.row-suspension td:first-child{border-left:3px solid var(--pink);}
+.row-aviso td:first-child{border-left:3px solid var(--orange);}
+.row-sent td:first-child{border-left:3px solid var(--green);}
+.row-open td:first-child{border-left:3px solid var(--blue);}
+.row-checked{background:#fff8e1 !important;}
+.cust{font-weight:600;font-size:13px;color:var(--navy);}
+.invno{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--g5);}
+.dval{font-size:12px;color:var(--g6);}
+.dval.bold{font-weight:600;color:var(--navy);}
+.eml{font-size:11px;color:var(--g5);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bal{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;}
+.db{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;}
+.db-mora{background:var(--red-bg);color:var(--red);}
+.db-suspension{background:var(--pink-bg);color:var(--pink);}
+.db-aviso{background:var(--orange-bg);color:var(--orange);}
+.db-sent{background:var(--green-bg);color:var(--green);}
+.db-open{background:var(--blue-bg);color:var(--blue);}
+.sb{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.sdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.sb-mora{background:var(--red-bg);color:var(--red);}
+.sb-mora .sdot{background:var(--red);}
+.sb-suspension{background:var(--pink-bg);color:var(--pink);}
+.sb-suspension .sdot{background:var(--pink);}
+.sb-aviso{background:var(--orange-bg);color:var(--orange);}
+.sb-aviso .sdot{background:var(--orange);}
+.sb-sent{background:var(--green-bg);color:var(--green);}
+.sb-sent .sdot{background:var(--green);}
+.sb-open{background:var(--blue-bg);color:var(--blue);}
+.sb-open .sdot{background:var(--blue);}
+.acts{display:flex;gap:5px;justify-content:flex-end;}
+.ba{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;border:1px solid;cursor:pointer;transition:all .12s;white-space:nowrap;}
+.ba-mora{background:var(--red-bg);border-color:rgba(192,57,43,.25);color:var(--red);}
+.ba-aviso{background:var(--orange-bg);border-color:rgba(224,123,42,.25);color:var(--orange);}
+.ba-susp{background:var(--pink-bg);border-color:rgba(212,56,108,.25);color:var(--pink);}
+.ba-blue{background:var(--blue-bg);border-color:rgba(59,111,212,.25);color:var(--blue);}
+.ba-resend{background:var(--green-bg);border-color:rgba(30,138,94,.25);color:var(--green);}
+.sec-sep td{padding:0;}
+.sec-inner{display:flex;align-items:center;gap:10px;padding:0 14px;height:32px;background:var(--g1);border-bottom:1px solid var(--border);}
+.sec-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
+.sec-lbl.mora{color:var(--red);}
+.sec-lbl.suspension{color:var(--pink);}
+.sec-lbl.aviso{color:var(--orange);}
+.sec-lbl.sent{color:var(--green);}
+.sec-lbl.open{color:var(--blue);}
+.sec-line{flex:1;height:1px;background:var(--border);}
+.sec-cnt{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;}
+.sc-mora{background:var(--red-bg);color:var(--red);}
+.sc-suspension{background:var(--pink-bg);color:var(--pink);}
+.sc-aviso{background:var(--orange-bg);color:var(--orange);}
+.sc-sent{background:var(--green-bg);color:var(--green);}
+.sc-open{background:var(--blue-bg);color:var(--blue);}
+.cb-cell{width:40px;text-align:center;}
+.cb-cell input{width:16px;height:16px;cursor:pointer;accent-color:var(--pink);}
+.suspend-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:3px solid var(--pink);padding:16px 28px;z-index:300;align-items:center;justify-content:space-between;gap:12px;}
+.suspend-bar.show{display:flex;}
+.sb-info{color:#fff;font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;}
+.sb-cnt{background:var(--pink);color:#fff;font-size:12px;font-weight:700;padding:2px 10px;border-radius:20px;}
+.sb-list{font-size:12px;color:rgba(255,255,255,.5);}
+.sb-btns{display:flex;gap:8px;}
+.btn-do-susp{padding:9px 22px;background:var(--pink);border:none;color:#fff;border-radius:8px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
+.btn-cancel-sel{padding:9px 16px;background:transparent;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.6);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;}
+.empty{padding:40px;text-align:center;color:var(--g5);font-size:13px;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(13,27,46,.6);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:14px;width:100%;max-width:600px;box-shadow:0 20px 60px rgba(13,27,46,.2);overflow:hidden;}
+.mhead{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;}
+.mhl{display:flex;align-items:center;gap:10px;}
+.micon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.micon.orange{background:var(--orange-bg);}
+.micon.red{background:var(--red-bg);}
+.micon.pink{background:var(--pink-bg);}
+.micon.blue{background:var(--blue-bg);}
+.mtitle{font-size:15px;font-weight:700;color:var(--navy);}
+.msub{font-size:12px;color:var(--g5);margin-top:2px;}
+.mbclose{background:none;border:none;color:var(--g4);font-size:18px;cursor:pointer;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.mbody{padding:20px 24px;}
+.mfrow{display:grid;grid-template-columns:56px 1fr;gap:6px;padding:5px 0;border-bottom:1px solid var(--g2);}
+.mfrow:last-child{border-bottom:none;}
+.mflabel{font-size:11px;font-weight:600;color:var(--g5);text-transform:uppercase;padding-top:2px;}
+.mfval{font-size:12px;color:var(--g6);word-break:break-all;font-family:'IBM Plex Mono',monospace;}
+.mprev{background:var(--g1);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:13px;line-height:1.7;color:var(--text);max-height:260px;overflow-y:auto;white-space:pre-wrap;margin-top:14px;}
+.mfoot{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;gap:8px;background:var(--g1);}
+.bcancel{padding:8px 16px;background:var(--white);border:1px solid var(--border);color:var(--g6);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;}
+.bsend{padding:8px 20px;border:none;color:#fff;border-radius:8px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
+.bsend.blue{background:var(--blue);}
+.bsend.orange{background:var(--orange);}
+.bsend.red{background:var(--red);}
+.bsend.pink{background:var(--pink);}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:1000;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.hist-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.hist-head h2{font-size:18px;font-weight:700;color:var(--navy);}
+.bclear{padding:6px 14px;background:var(--white);border:1px solid var(--border);color:var(--g5);border-radius:8px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;}
+.bclear:hover{border-color:var(--red);color:var(--red);}
+.hm-card{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;}
+.hm-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--g1);}
+.hm-title{font-size:14px;font-weight:700;color:var(--navy);}
+.hm-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.hchip{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;}
+.hc-aviso{background:var(--orange-bg);color:var(--orange);}
+.hc-mora{background:var(--red-bg);color:var(--red);}
+.hc-susp{background:var(--pink-bg);color:var(--pink);}
+.hc-total{background:var(--blue-bg);color:var(--blue);}
+.htable{width:100%;border-collapse:collapse;}
+.htable th{padding:8px 14px;font-size:11px;font-weight:600;color:var(--g5);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left;}
+.htable th.r{text-align:right;}
+.htable td{padding:9px 14px;font-size:12px;border-bottom:1px solid var(--g2);}
+.htable td.r{text-align:right;}
+.htable tr:last-child td{border-bottom:none;}
+.htb{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+.htb-aviso{background:var(--orange-bg);color:var(--orange);}
+.htb-mora{background:var(--red-bg);color:var(--red);}
+.htb-susp{background:var(--pink-bg);color:var(--pink);}
+.hempty{padding:32px;text-align:center;color:var(--g5);font-size:13px;}
+.rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+.rcard{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.rcard-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g5);margin-bottom:12px;}
+.rrow{display:flex;align-items:baseline;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--g2);}
+.rrow:last-child{border-bottom:none;}
+.rlabel{font-size:12px;color:var(--g6);}
+.rval{font-size:14px;font-weight:700;font-family:'IBM Plex Mono',monospace;}
+@media(max-width:900px){.page{padding:16px;}.stats{grid-template-columns:repeat(2,1fr);}.hide-sm{display:none;}.rgrid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo-wrap">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="3" stroke="white" stroke-width="1.5"/><ellipse cx="9" cy="9" rx="7.5" ry="3" stroke="white" stroke-width="1.5"/><ellipse cx="9" cy="9" rx="7.5" ry="3" stroke="white" stroke-width="1.5" transform="rotate(60 9 9)"/><ellipse cx="9" cy="9" rx="7.5" ry="3" stroke="white" stroke-width="1.5" transform="rotate(-60 9 9)"/></svg>
+    </div>
+    <span class="logo-text">OLIVER<span>SPORTS</span></span>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('facturas',this)">Facturas</button>
+    <button class="nav-tab" onclick="showPage('historial',this)">Historial</button>
+    <button class="nav-tab" onclick="showPage('resumen',this)">Resumen</button>
+  </div>
+  <div class="nav-right">
+    <span class="gen-badge">Generado: 01/06/2026 12:52</span>
+    <span class="hdr-badge">Cobranzas</span>
+  </div>
+</nav>
+
+<div id="page-facturas" class="page active">
+  <div class="workflow">
+    <div class="wf-title">Flujo mensual &mdash; Monday 01 de June de 2026</div>
+    <div class="wf-steps">
+      <div class="wf-step lunes"><span class="wf-date">1er dia habil</span><span class="wf-action">Revisar adeudados &rarr; enviar aviso suspension (3 dias para pagar)</span></div>
+      <span class="wf-arrow">&rarr;</span>
+      <div class="wf-step jueves"><span class="wf-date">+3 dias</span><span class="wf-action">Sin pago &rarr; tildar y suspender plataforma</span></div>
+      <span class="wf-arrow">&rarr;</span>
+      <div class="wf-step mora"><span class="wf-date">+60 dias</span><span class="wf-action">Mora &middot; notificacion legal desde legal@oliversports.ai</span></div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-top"><span class="stat-label">Total adeudado</span><div class="stat-icon ic-blue">&#x1F4B0;</div></div><div class="stat-value c-navy">&#x20AC;32,907.26</div><div class="stat-sub" id="s-sub"></div></div>
+    <div class="stat"><div class="stat-top"><span class="stat-label">Mora largo plazo</span><div class="stat-icon ic-red">&#x2696;</div></div><div class="stat-value c-red">&#x20AC;6,750.00</div><div class="stat-sub">2 clientes &middot; suspendidos</div></div>
+    <div class="stat"><div class="stat-top"><span class="stat-label">Aviso / suspension</span><div class="stat-icon ic-orange">&#x26A0;</div></div><div class="stat-value c-orange">&#x20AC;21,075.26</div><div class="stat-sub">2 susp. + 10 avisos</div></div>
+    <div class="stat"><div class="stat-top"><span class="stat-label">Avisos enviados</span><div class="stat-icon ic-green">&#x2709;</div></div><div class="stat-value c-navy" id="s-sent-val">0</div><div class="stat-sub">avisos registrados</div></div>
+  </div>
+  <div class="toolbar">
+    <button class="fbtn fa" id="fb-all" onclick="setFilter('all',this)">Todos</button>
+    <button class="fbtn" id="fb-mora" onclick="setFilter('mora',this)">Mora</button>
+    <button class="fbtn" id="fb-suspension" onclick="setFilter('suspension',this)">Suspendidos</button>
+    <button class="fbtn" id="fb-aviso" onclick="setFilter('aviso',this)">Pendientes</button>
+    <button class="fbtn" id="fb-sent" onclick="setFilter('sent',this)">Enviado</button>
+    <button class="fbtn" id="fb-open" onclick="setFilter('open',this)">Por vencer</button>
+    <div class="search-wrap"><span class="si">&#x1F50D;</span><input type="text" placeholder="Buscar cliente o factura..." oninput="doSearch(this.value)"/></div>
+  </div>
+  <div class="tcard">
+    <table>
+      <thead><tr>
+        <th class="cb-cell"><input type="checkbox" id="cb-master" onchange="toggleAll(this)" title="Seleccionar todos"></th>
+        <th>Cliente</th>
+        <th class="hide-sm">Emision</th>
+        <th class="hide-sm">Vencimiento</th>
+        <th class="hide-sm">Email</th>
+        <th class="r">Balance</th>
+        <th class="r hide-sm">Dias</th>
+        <th>Estado</th>
+        <th class="r">Acciones</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="empty" id="empty" style="display:none">Sin resultados</div>
+  </div>
+</div>
+
+<div id="page-historial" class="page">
+  <div class="hist-head"><h2>Historial de envios</h2><button class="bclear" onclick="clearAll()">Limpiar</button></div>
+  <div id="hist-content"></div>
+</div>
+
+<div id="page-resumen" class="page">
+  <div class="hist-head"><h2>Resumen mensual</h2></div>
+  <div class="rgrid" id="rgrid"></div>
+  <div class="tcard" id="rtable-wrap" style="display:none">
+    <table>
+      <thead><tr><th>Mes</th><th class="r">Facturas</th><th class="r">Balance</th><th class="r">Avisos</th><th class="r">Mora</th><th class="r">Suspensiones</th><th class="r">Total envios</th></tr></thead>
+      <tbody id="rtbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="suspend-bar" id="suspend-bar">
+  <div class="sb-info">
+    <span class="sb-cnt" id="sb-cnt">0</span>
+    <span>seleccionados para suspender</span>
+    <span class="sb-list" id="sb-list"></span>
+  </div>
+  <div class="sb-btns">
+    <button class="btn-cancel-sel" onclick="clearSel()">Cancelar</button>
+    <button class="btn-do-susp" onclick="suspendSel()">Suspender seleccionados</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="maybeClose(event)">
+  <div class="modal">
+    <div class="mhead">
+      <div class="mhl">
+        <div class="micon orange" id="micon">!</div>
+        <div><div class="mtitle" id="mtitle">Aviso</div><div class="msub" id="msub"></div></div>
+      </div>
+      <button class="mbclose" onclick="closeModal()">x</button>
+    </div>
+    <div class="mbody">
+      <div class="mfrow"><span class="mflabel">Para</span><span class="mfval" id="mto"></span></div>
+      <div class="mfrow"><span class="mflabel">De</span><span class="mfval" id="mfrom"></span></div>
+      <div class="mfrow"><span class="mflabel">CC</span><span class="mfval" id="mcc"></span></div>
+      <div class="mfrow"><span class="mflabel">Asunto</span><span class="mfval" id="msubject"></span></div>
+      <div class="mprev" id="mbody"></div>
+    </div>
+    <div class="mfoot">
+      <button class="bcancel" onclick="closeModal()">Cancelar</button>
+      <button class="bsend orange" id="mbtn" onclick="doSend()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var DATA = [{"no": "2026-40", "emission": "31/01/2026", "customer": "Joint Venture Bangkok Engineer Co., ltd", "due": "13/02/2026", "balance": 5550.0, "email": "tachapat10@gmail.com", "days_overdue": 108, "status": "mora"}, {"no": "2026-118", "emission": "06/03/2026", "customer": "ACE SPORTS", "due": "06/03/2026", "balance": 1200.0, "email": "adam@goaceit.co, azaki@goaceit.co", "days_overdue": 87, "status": "mora"}, {"no": "2026-161", "emission": "06/04/2026", "customer": "ARANDA PERSONAL TRAINING SL", "due": "06/04/2026", "balance": 975.01, "email": "julio@eurosoccertrips.com", "days_overdue": 56, "status": "suspension"}, {"no": "2026-156", "emission": "04/04/2026", "customer": "TORONTO UNITED FOOTBALL CLUB INC.", "due": "30/04/2026", "balance": 2200.0, "email": "eric@torontounited.ca", "days_overdue": 32, "status": "suspension"}, {"no": "2026-218", "emission": "06/05/2026", "customer": "Real Elmos Herentals", "due": "06/05/2026", "balance": 245.0, "email": "kenny_272@msn.com, facturatie@realelmosherentals.be", "days_overdue": 26, "status": "aviso"}, {"no": "2026-217", "emission": "06/05/2026", "customer": "ARANDA PERSONAL TRAINING SL", "due": "06/05/2026", "balance": 975.01, "email": "julio@eurosoccertrips.com", "days_overdue": 26, "status": "aviso"}, {"no": "2026-222", "emission": "06/05/2026", "customer": "CLUB DEPORTIVO UNION SAN FELIPE SADP", "due": "06/05/2026", "balance": 1246.59, "email": "rozascamilo@gmail.com, eduardoolivares.g@gmail.com", "days_overdue": 26, "status": "aviso"}, {"no": "2026-230", "emission": "10/05/2026", "customer": "VALOR EVOLUTION S.L.", "due": "10/05/2026", "balance": 200.0, "email": "nacho@profutcamps.com", "days_overdue": 22, "status": "aviso"}, {"no": "2026-238", "emission": "14/05/2026", "customer": "ALVARO ARIEL GALINDO LOPEZ", "due": "14/05/2026", "balance": 200.0, "email": "galindolopezalvaroariel@gmail.com", "days_overdue": 18, "status": "aviso"}, {"no": "2026-213", "emission": "04/05/2026", "customer": "Santiago Garc\u00eda G\u00f3mez", "due": "15/05/2026", "balance": 937.5, "email": "alphatorneos@gmail.com", "days_overdue": 17, "status": "aviso"}, {"no": "2026-221", "emission": "06/05/2026", "customer": "Alta Distribuci\u00f3n S.A", "due": "16/05/2026", "balance": 2271.25, "email": "pedrohcoste@gmail.com", "days_overdue": 16, "status": "aviso"}, {"no": "2026-208", "emission": "03/05/2026", "customer": "Novo Futbol sas", "due": "18/05/2026", "balance": 2000.0, "email": "cmveo@novofutbol.com, cmveo@novofutbol.com", "days_overdue": 14, "status": "aviso"}, {"no": "2026-204", "emission": "03/05/2026", "customer": "Alexis Arg\u00fcello", "due": "18/05/2026", "balance": 1125.0, "email": "alexisacantos@gmail.com", "days_overdue": 14, "status": "aviso"}, {"no": "2026-249", "emission": "29/05/2026", "customer": "Atletic Sant Just Futbol Club", "due": "29/05/2026", "balance": 8699.9, "email": "", "days_overdue": 3, "status": "aviso"}, {"no": "2026-242", "emission": "15/05/2026", "customer": "UNIVERSITAT ROVIRA I VIRGILI", "due": "14/06/2026", "balance": 5082.0, "email": "isaac.francin@urv.cat", "days_overdue": -13, "status": "open"}];
+
+var SENT_KEY = 'oliver_sent';
+var HIST_KEY = 'oliver_hist';
+var SNAP_KEY = 'oliver_snaps';
+
+function getSent(){try{return JSON.parse(localStorage.getItem(SENT_KEY)||'{}')}catch(e){return {}}}
+function saveSent(m){localStorage.setItem(SENT_KEY,JSON.stringify(m))}
+function getHist(){try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]')}catch(e){return []}}
+function saveHist(h){localStorage.setItem(HIST_KEY,JSON.stringify(h))}
+function getSnaps(){try{return JSON.parse(localStorage.getItem(SNAP_KEY)||'{}')}catch(e){return {}}}
+function saveSnaps(s){localStorage.setItem(SNAP_KEY,JSON.stringify(s))}
+
+function eur(n){return '\u20AC'+Number(n).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtDays(d){return d<0?'en '+Math.abs(d)+'d':d===0?'hoy':'+'+d+'d';}
+function monthKey(date){return date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0');}
+function monthLabel(key){var p=key.split('-');return new Date(p[0],p[1]-1).toLocaleDateString('es-ES',{month:'long',year:'numeric'});}
+var curMK = monthKey(new Date());
+
+function effStatus(r){
+  var s=getSent();
+  if(s[r.no]==='sent'&&r.status!=='mora'&&r.status!=='suspension') return 'sent';
+  return r.status;
+}
+
+function updateStats(){
+  document.getElementById('s-sub').textContent=DATA.length+' facturas pendientes';
+  var sc=Object.values(getSent()).filter(function(v){return v==='sent';}).length;
+  document.getElementById('s-sent-val').textContent=sc;
+}
+
+var curFilter='all', curSearch='', curRow=null, curType='', curIdx=-1;
+
+var SEC_ORDER=['mora','suspension','aviso','sent','open'];
+var SEC_LABELS={
+  mora:'Mora largo plazo - proceso legal',
+  suspension:'Plataforma suspendida',
+  aviso:'Pendientes de aviso - enviar hoy',
+  sent:'Aviso enviado - esperando pago',
+  open:'Por vencer'
+};
+
+function renderTable(){
+  var tb=document.getElementById('tbody');
+  var em=document.getElementById('empty');
+  var rows=DATA.map(function(r,i){
+    var obj={};
+    for(var k in r) obj[k]=r[k];
+    obj._i=i;
+    obj._e=effStatus(r);
+    return obj;
+  }).filter(function(r){
+    var mf=curFilter==='all'||r._e===curFilter;
+    var ms=!curSearch||r.customer.toLowerCase().indexOf(curSearch)>=0||r.no.toLowerCase().indexOf(curSearch)>=0;
+    return mf&&ms;
+  });
+  if(!rows.length){tb.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  var h='';
+  if(curFilter==='all'){
+    for(var si=0;si<SEC_ORDER.length;si++){
+      var sec=SEC_ORDER[si];
+      var sr=rows.filter(function(r){return r._e===sec;});
+      if(!sr.length) continue;
+      var tot=sr.reduce(function(a,r){return a+r.balance;},0);
+      h+='<tr class="sec-sep"><td colspan="9"><div class="sec-inner"><span class="sec-lbl '+sec+'">'+SEC_LABELS[sec]+'</span><span class="sec-line"></span><span class="sec-cnt sc-'+sec+'">'+sr.length+' - '+eur(tot)+'</span></div></td></tr>';
+      for(var ri=0;ri<sr.length;ri++) h+=buildRow(sr[ri]);
+    }
+  } else {
+    for(var ri2=0;ri2<rows.length;ri2++) h+=buildRow(rows[ri2]);
+  }
+  tb.innerHTML=h;
+}
+
+function buildRow(r){
+  var bc=r.balance>2000?'color:var(--red)':r.balance>500?'color:var(--navy)':'color:var(--g6)';
+  var canSel=r._e==='sent'||r._e==='aviso'||r._e==='suspension';
+  var cbHtml=canSel?'<td class="cb-cell"><input type="checkbox" class="row-cb" data-idx="'+r._i+'" onchange="onCbChange()"></td>':'<td></td>';
+  var dbCls='db-'+r._e;
+  var acts='';
+  if(r._e==='mora'){
+    acts='<div class="acts"><button class="ba ba-mora" onclick="openM('+r._i+',\'mora\')">Notif. legal</button></div>';
+  } else if(r._e==='suspension'){
+    acts='<div class="acts"><button class="ba ba-aviso" onclick="openM('+r._i+',\'aviso\')">Aviso</button><button class="ba ba-mora" onclick="openM('+r._i+',\'mora\')">Mora</button></div>';
+  } else if(r._e==='aviso'){
+    acts='<div class="acts"><button class="ba ba-aviso" onclick="openM('+r._i+',\'aviso\')">Aviso suspension</button><button class="ba ba-susp" onclick="openM('+r._i+',\'suspend\')">Suspender</button></div>';
+  } else if(r._e==='sent'){
+    acts='<div class="acts"><span style="font-size:11px;color:var(--green);font-weight:600;">Enviado</span><button class="ba ba-resend" onclick="openM('+r._i+',\'aviso\')" style="margin-left:6px;">Reenviar</button></div>';
+  } else {
+    acts='<div class="acts"><button class="ba ba-blue" onclick="openM('+r._i+',\'reminder\')">Recordatorio</button></div>';
+  }
+  var sbMap={mora:'sb-mora Mora suspendido',suspension:'sb-suspension Suspendido',aviso:'sb-aviso Pendiente aviso',sent:'sb-sent Aviso enviado',open:'sb-open Por vencer'};
+  var sbParts=(sbMap[r._e]||'sb-open Por vencer').split(' ');
+  var sbCls=sbParts[0];
+  var sbLbl=sbParts.slice(1).join(' ');
+  var email=r.email||'';
+  return '<tr class="row-'+r._e+'" id="tr-'+r._i+'">'+cbHtml+'<td><div class="cust">'+r.customer+'</div><div class="invno">'+r.no+'</div></td><td class="hide-sm"><div class="dval">'+r.emission+'</div></td><td class="hide-sm"><div class="dval bold">'+r.due+'</div></td><td class="eml hide-sm" title="'+email+'">'+email+'</td><td class="r"><span class="bal" style="'+bc+'">'+eur(r.balance)+'</span></td><td class="r hide-sm"><span class="db '+dbCls+'">'+fmtDays(r.days_overdue)+'</span></td><td><span class="sb '+sbCls+'"><span class="sdot"></span>'+sbLbl+'</span></td><td>'+acts+'</td></tr>';
+}
+
+function setFilter(t,btn){
+  curFilter=t;
+  var btns=document.querySelectorAll('.fbtn');
+  for(var i=0;i<btns.length;i++) btns[i].className='fbtn';
+  var cm={all:'fa',mora:'fa-mora',suspension:'fa-suspension',aviso:'fa-aviso',sent:'fa-sent',open:'fa-open'};
+  btn.classList.add(cm[t]||'fa');
+  renderTable();
+}
+function doSearch(q){curSearch=q.toLowerCase().trim();renderTable();}
+
+function tplAviso(r){return 'Buenos dias / Buenas tardes, '+r.customer+'.\n\nNos ponemos en contacto para informarle que se registran facturas pendientes de pago.\n\n  Factura N: '+r.no+'\n  Fecha emision: '+r.emission+'\n  Fecha vencimiento: '+r.due+'\n  Importe pendiente: '+eur(r.balance)+'\n\nDe no regularizar en 3 dias habiles, suspenderemos el acceso a la plataforma Oliver Sports.\n\nMuchas gracias.\nEquipo Oliver Sports\nsupport@oliversports.ai';}
+function tplMora(r){return 'Estimado/a '+r.customer+':\n\nSu cuenta se encuentra en situacion de mora.\n\n  Factura N: '+r.no+'\n  Fecha emision: '+r.emission+'\n  Fecha vencimiento: '+r.due+'\n  Saldo impago: '+eur(r.balance)+'\n  Dias en mora: '+r.days_overdue+' dias\n\nDe no regularizar, iniciaremos acciones legales.\n\nOliver Sports - Departamento Legal\nlegal@oliversports.ai';}
+function tplSuspend(r){return 'Estimado/a '+r.customer+':\n\nProcedemos a la suspension de su cuenta por falta de pago de factura '+r.no+' (vto. '+r.due+') por '+eur(r.balance)+'.\n\nPara reactivar, regularice el pago y envie comprobante a support@oliversports.ai\n\nEquipo Oliver Sports';}
+function tplReminder(r){return 'Estimado/a '+r.customer+':\n\nLe recordamos que la factura '+r.no+' por '+eur(r.balance)+' vence el '+r.due+'.\n\nMuchas gracias.\nEquipo Oliver Sports';}
+
+function openM(idx,type){
+  curRow=DATA[idx];curType=type;curIdx=idx;
+  var r=curRow;
+  document.getElementById('mto').textContent=r.email||'(sin email)';
+  if(type==='mora'){
+    setMHead('red','Legal','Notificacion de mora','legal@oliversports.ai','flor@oliversports.ai, pablo@oliversports.ai','OLIVER SPORTS - Notificacion mora Factura '+r.no,tplMora(r),'red','Enviar notificacion legal');
+  } else if(type==='suspend'){
+    setMHead('pink','Lock','Suspension de cuenta','support@oliversports.ai','flor@oliversports.ai, pablo@oliversports.ai','Cuenta suspendida - '+r.customer,tplSuspend(r),'pink','Confirmar y enviar');
+  } else if(type==='aviso'){
+    setMHead('orange','!','Advertencia de suspension','support@oliversports.ai','flor@oliversports.ai, pablo@oliversports.ai','Aviso facturas pendientes - '+r.customer,tplAviso(r),'orange','Enviar aviso');
+  } else {
+    setMHead('blue','Info','Recordatorio vencimiento','support@oliversports.ai','pablo@oliversports.ai','Recordatorio factura - '+r.customer,tplReminder(r),'blue','Enviar recordatorio');
+  }
+  document.getElementById('overlay').classList.add('open');
+}
+function setMHead(ic,ico,title,from,cc,subj,body,btnCls,btnTxt){
+  document.getElementById('micon').className='micon '+ic;
+  document.getElementById('micon').textContent=ico;
+  document.getElementById('mtitle').textContent=title;
+  document.getElementById('msub').textContent=curRow.customer+' - '+eur(curRow.balance);
+  document.getElementById('mfrom').textContent=from;
+  document.getElementById('mcc').textContent=cc;
+  document.getElementById('msubject').textContent=subj;
+  document.getElementById('mbody').textContent=body;
+  var btn=document.getElementById('mbtn');
+  btn.className='bsend '+btnCls;btn.textContent=btnTxt;
+}
+function maybeClose(e){if(e.target===document.getElementById('overlay'))closeModal();}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+function doSend(){
+  var to=document.getElementById('mto').textContent;
+  var subj=document.getElementById('msubject').textContent;
+  var body=document.getElementById('mbody').textContent;
+  window.open('mailto:'+to+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body));
+  if(curType==='aviso'||curType==='suspend'||curType==='reminder'){
+    var s=getSent();s[curRow.no]='sent';saveSent(s);
+  }
+  var h=getHist();
+  h.push({ts:new Date().toISOString(),month:monthKey(new Date()),invoice:curRow.no,customer:curRow.customer,type:curType,balance:curRow.balance,from:document.getElementById('mfrom').textContent,to:to});
+  saveHist(h);
+  closeModal();updateStats();renderTable();
+  showToast('Mail preparado - estado actualizado');
+}
+
+function onCbChange(){
+  var checked=document.querySelectorAll('.row-cb:checked');
+  var bar=document.getElementById('suspend-bar');
+  if(checked.length>0){
+    bar.classList.add('show');
+    document.getElementById('sb-cnt').textContent=checked.length;
+    var names=[];
+    for(var i=0;i<checked.length;i++){
+      var r=DATA[parseInt(checked[i].dataset.idx)];
+      names.push(r.customer.split(' ').slice(0,2).join(' '));
+    }
+    document.getElementById('sb-list').textContent=names.join(', ');
+  } else {
+    bar.classList.remove('show');
+  }
+}
+function toggleAll(master){
+  var cbs=document.querySelectorAll('.row-cb');
+  for(var i=0;i<cbs.length;i++) cbs[i].checked=master.checked;
+  onCbChange();
+}
+function clearSel(){
+  var cbs=document.querySelectorAll('.row-cb');
+  for(var i=0;i<cbs.length;i++) cbs[i].checked=false;
+  var m=document.getElementById('cb-master');
+  if(m) m.checked=false;
+  document.getElementById('suspend-bar').classList.remove('show');
+}
+function suspendSel(){
+  var checked=document.querySelectorAll('.row-cb:checked');
+  if(!checked.length) return;
+  var selected=[];
+  for(var i=0;i<checked.length;i++) selected.push(DATA[parseInt(checked[i].dataset.idx)]);
+  var list=selected.map(function(r){return '  - '+r.customer+' | Factura '+r.no+' | '+eur(r.balance);}).join('\n');
+  var body='Equipo,\n\nSe procede a suspender las siguientes cuentas por falta de pago:\n\n'+list+'\n\nPara reactivar, el cliente debe regularizar el pago y enviar comprobante a support@oliversports.ai\n\nOliver Sports';
+  var subj='Suspension de cuentas - '+selected.length+' cliente(s) - '+new Date().toLocaleDateString('es-AR');
+  var s=getSent();
+  var h=getHist();
+  var emails=[];
+  for(var i=0;i<selected.length;i++){
+    s[selected[i].no]='sent';
+    h.push({ts:new Date().toISOString(),month:monthKey(new Date()),invoice:selected[i].no,customer:selected[i].customer,type:'suspend',balance:selected[i].balance,from:'support@oliversports.ai',to:selected[i].email});
+    if(selected[i].email) emails.push(selected[i].email);
+  }
+  saveSent(s);saveHist(h);
+  window.open('mailto:'+emails.join(',')+' ?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body));
+  clearSel();updateStats();renderTable();
+  showToast(selected.length+' cuentas suspendidas - mail preparado');
+}
+
+function renderHist(){
+  var hist=getHist();
+  var el=document.getElementById('hist-content');
+  if(!hist.length){el.innerHTML='<div class="hempty">Ningun envio registrado. Los mails enviados desde aqui quedan guardados automaticamente.</div>';return;}
+  var byM={};
+  for(var i=0;i<hist.length;i++){
+    var e=hist[i];
+    if(!byM[e.month]) byM[e.month]=[];
+    byM[e.month].push(e);
+  }
+  var months=Object.keys(byM).sort().reverse();
+  var h='';
+  for(var mi=0;mi<months.length;mi++){
+    var m=months[mi];
+    var entries=byM[m].slice().reverse();
+    var av=entries.filter(function(e){return e.type==='aviso'||e.type==='reminder';}).length;
+    var mo=entries.filter(function(e){return e.type==='mora';}).length;
+    var su=entries.filter(function(e){return e.type==='suspend';}).length;
+    var tot=entries.reduce(function(a,e){return a+e.balance;},0);
+    h+='<div class="hm-card"><div class="hm-head"><span class="hm-title">'+monthLabel(m)+'</span><div class="hm-meta">'+(av?'<span class="hchip hc-aviso">'+av+' avisos</span>':'')+(mo?'<span class="hchip hc-mora">'+mo+' mora</span>':'')+(su?'<span class="hchip hc-susp">'+su+' suspensiones</span>':'')+'<span class="hchip hc-total">'+eur(tot)+'</span></div></div>';
+    h+='<table class="htable"><thead><tr><th>Fecha</th><th>Cliente</th><th>Factura</th><th>Tipo</th><th class="r">Balance</th></tr></thead><tbody>';
+    for(var ei=0;ei<entries.length;ei++){
+      var e2=entries[ei];
+      var d=new Date(e2.ts);
+      var tmap={aviso:'htb-aviso',mora:'htb-mora',suspend:'htb-susp',reminder:'htb-aviso'};
+      var tlabel={aviso:'Aviso',mora:'Notif. legal',suspend:'Suspension',reminder:'Recordatorio'};
+      h+='<tr><td style="font-size:11px;color:var(--g5);">'+d.toLocaleDateString('es-AR')+' '+d.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})+'</td><td style="font-weight:600;">'+e2.customer+'</td><td style="font-size:11px;color:var(--g5);">'+e2.invoice+'</td><td><span class="htb '+(tmap[e2.type]||'htb-aviso')+'">'+(tlabel[e2.type]||e2.type)+'</span></td><td class="r" style="font-weight:600;">'+eur(e2.balance)+'</td></tr>';
+    }
+    h+='</tbody></table></div>';
+  }
+  el.innerHTML=h;
+}
+
+function renderResumen(){
+  var hist=getHist();
+  var allM=new Set([curMK]);
+  for(var i=0;i<hist.length;i++) allM.add(hist[i].month);
+  var months=Array.from(allM).sort().reverse();
+  var sendsByM={};
+  for(var i=0;i<hist.length;i++){
+    var e=hist[i];
+    if(!sendsByM[e.month]) sendsByM[e.month]={av:0,mo:0,su:0,tot:0,bal:0};
+    var mm=sendsByM[e.month];
+    if(e.type==='aviso'||e.type==='reminder') mm.av++;
+    else if(e.type==='mora') mm.mo++;
+    else if(e.type==='suspend') mm.su++;
+    mm.tot++;mm.bal+=e.balance;
+  }
+  var liveBal=DATA.reduce(function(a,r){return a+r.balance;},0);
+  var liveMora=DATA.filter(function(r){return r.status==='mora';}).length;
+  var liveSusp=DATA.filter(function(r){return r.status==='suspension';}).length;
+  var liveAviso=DATA.filter(function(r){return r.status==='aviso';}).length;
+  var liveSent=Object.values(getSent()).filter(function(v){return v==='sent';}).length;
+  var thisMo=sendsByM[curMK]||{av:0,mo:0,su:0,tot:0,bal:0};
+  document.getElementById('rgrid').innerHTML='<div class="rcard"><div class="rcard-title">Mes actual</div><div class="rrow"><span class="rlabel">Facturas pendientes</span><span class="rval c-navy">'+DATA.length+'</span></div><div class="rrow"><span class="rlabel">Mora largo plazo</span><span class="rval c-red">'+liveMora+'</span></div><div class="rrow"><span class="rlabel">Suspendidos</span><span class="rval" style="color:var(--pink);">'+liveSusp+'</span></div><div class="rrow"><span class="rlabel">Pendientes aviso</span><span class="rval c-orange">'+liveAviso+'</span></div><div class="rrow"><span class="rlabel">Avisos enviados</span><span class="rval" style="color:var(--green);">'+liveSent+'</span></div><div class="rrow"><span class="rlabel">Balance total</span><span class="rval c-blue">'+eur(liveBal)+'</span></div></div><div class="rcard"><div class="rcard-title">Envios este mes</div><div class="rrow"><span class="rlabel">Avisos suspension</span><span class="rval c-orange">'+thisMo.av+'</span></div><div class="rrow"><span class="rlabel">Notif. legales</span><span class="rval c-red">'+thisMo.mo+'</span></div><div class="rrow"><span class="rlabel">Suspensiones</span><span class="rval" style="color:var(--pink);">'+thisMo.su+'</span></div><div class="rrow"><span class="rlabel">Total enviados</span><span class="rval c-navy">'+thisMo.tot+'</span></div></div><div class="rcard"><div class="rcard-title">Historico</div><div class="rrow"><span class="rlabel">Meses registrados</span><span class="rval c-navy">'+months.length+'</span></div><div class="rrow"><span class="rlabel">Total envios</span><span class="rval c-navy">'+hist.length+'</span></div><div class="rrow"><span class="rlabel">Avisos totales</span><span class="rval c-orange">'+hist.filter(function(e){return e.type==='aviso'||e.type==='reminder';}).length+'</span></div><div class="rrow"><span class="rlabel">Notif. legales</span><span class="rval c-red">'+hist.filter(function(e){return e.type==='mora';}).length+'</span></div></div>';
+  if(months.length){
+    document.getElementById('rtable-wrap').style.display='block';
+    var rows='';
+    for(var mi=0;mi<months.length;mi++){
+      var mk=months[mi];
+      var sd=sendsByM[mk]||{av:0,mo:0,su:0,tot:0,bal:0};
+      var isLive=mk===curMK;
+      rows+='<tr><td><strong>'+monthLabel(mk)+'</strong>'+(isLive?' <span style="font-size:10px;background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:10px;font-weight:600;">en curso</span>':'')+'</td><td class="r">'+DATA.length+'</td><td class="r" style="font-weight:600;color:var(--blue);">'+eur(isLive?liveBal:sd.bal)+'</td><td class="r" style="color:var(--orange);font-weight:600;">'+sd.av+'</td><td class="r" style="color:var(--red);font-weight:600;">'+sd.mo+'</td><td class="r" style="color:var(--pink);font-weight:600;">'+sd.su+'</td><td class="r" style="font-weight:700;">'+sd.tot+'</td></tr>';
+    }
+    document.getElementById('rtbody').innerHTML=rows;
+  }
+}
+
+function clearAll(){
+  if(!confirm('Borrar historial? No se puede deshacer.')) return;
+  localStorage.removeItem(SENT_KEY);localStorage.removeItem(HIST_KEY);localStorage.removeItem(SNAP_KEY);
+  updateStats();renderTable();renderHist();renderResumen();
+  showToast('Historial limpiado');
+}
+function showPage(id,btn){
+  var pages=document.querySelectorAll('.page');
+  for(var i=0;i<pages.length;i++) pages[i].classList.remove('active');
+  var tabs=document.querySelectorAll('.nav-tab');
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove('active');
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='historial') renderHist();
+  if(id==='resumen') renderResumen();
+}
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3500);
+}
+updateStats();
+renderTable();
+</script>
+</body>
+</html>
